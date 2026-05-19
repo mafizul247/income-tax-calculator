@@ -53,8 +53,8 @@ const resources = {
             rural: "Area Outside City Corporation",
 
             investment_entry: "Entry Actual Investment",
-            salary: "Annual Gross Salary",
-            salary_placeholder: "Enter your salary",
+            salary: "Annual Gross Income",
+            salary_placeholder: "Enter Gross Income",
 
             submit: "Calculate Tax",
         }
@@ -109,8 +109,8 @@ const resources = {
             rural: "সিটি কর্পোরেশনের বাইরের এলাকা",
 
             investment_entry: "এন্ট্রি প্রকৃত বিনিয়োগ",
-            salary: "বার্ষিক মোট বেতন",
-            salary_placeholder: "আপনার বেতন লিখুন",
+            salary: "বার্ষিক মোট আয়",
+            salary_placeholder: "আপনার বার্ষিক মোট আয় লিখুন",
 
             submit: "ট্যাক্স হিসাব করুন",
 

@@ -213,7 +213,7 @@ const TaxForm = () => {
                             name="investment"
                             value={formatNumber(formData.investment)}
                             onChange={handleChange}
-                            placeholder="e.g. 100,000"
+                            placeholder={t("investment_entry")}
                             className="input input-bordered w-full"
                         />
                     </div>
@@ -222,7 +222,7 @@ const TaxForm = () => {
                     <div>
                         <label className="label">
                             <span className="label-text">
-                                {t("salary")} ({t("gross_salary")})
+                                {t("salary")}
                             </span>
                         </label>
 
@@ -231,7 +231,7 @@ const TaxForm = () => {
                             name="salary"
                             value={formatNumber(formData.salary)}
                             onChange={handleChange}
-                            placeholder="e.g. 1,000,000"
+                            placeholder={t("salary_placeholder")}
                             className="input input-bordered w-full"
                             required
                         />
