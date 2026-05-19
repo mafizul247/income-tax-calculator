@@ -12,19 +12,22 @@ const ShowTax = ({ result }) => {
         minTax
     } = result;
 
-    // ✅ Number formatter (with .00)
-    const formatMoney = (value) => {
-        return new Intl.NumberFormat("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(value || 0);
-    };
 
-    // ✅ Clean Tax Logic
-    const afterRebateTax =
-        totalTax === 0
-            ? 0
-            : Math.max(minTax, totalTax - rebate);
+    let afterRebateTax = 0;
+
+    if (totalTax === 0) {
+        afterRebateTax = 0
+    }
+    else if (totalTax > minTax) {
+        const newrebatet = totalTax - rebate
+        if (newrebatet > minTax) {
+            afterRebateTax = newrebatet;
+        } else {
+            afterRebateTax = minTax
+        }
+    }
+    
+
 
     return (
         <div className="max-w-xl mx-auto mt-6">
@@ -33,7 +36,7 @@ const ShowTax = ({ result }) => {
 
                 <div className="card-body">
 
-                    <h2 className="card-title text-center text-primary justify-center text-xl">
+                    <h2 className="card-title text-center text-primary justify-center">
                         {t("tax_result")}
                     </h2>
 
@@ -43,7 +46,7 @@ const ShowTax = ({ result }) => {
                         <div className="flex justify-between">
                             <span>{t("annual_salary")}</span>
                             <span className="font-semibold">
-                                ৳ {formatMoney(salary)}
+                                ৳ {salary}
                             </span>
                         </div>
 
@@ -51,7 +54,7 @@ const ShowTax = ({ result }) => {
                         <div className="flex justify-between">
                             <span>{t("tax_exemption")}</span>
                             <span className="font-semibold">
-                                ৳ {formatMoney(exemption)}
+                                ৳ {exemption}
                             </span>
                         </div>
 
@@ -59,7 +62,7 @@ const ShowTax = ({ result }) => {
                         <div className="flex justify-between">
                             <span>{t("taxable_income")}</span>
                             <span className="font-semibold">
-                                ৳ {formatMoney(taxable)}
+                                ৳ {taxable}
                             </span>
                         </div>
 
@@ -68,38 +71,33 @@ const ShowTax = ({ result }) => {
                         {/* Total Tax */}
                         <div className="flex justify-between text-lg font-bold text-primary">
                             <span>{t("total_tax")}</span>
-                            <span>৳ {formatMoney(totalTax)}</span>
+                            <span>৳ {totalTax}</span>
                         </div>
 
                         {/* Tax Rebate */}
                         <div className="flex justify-between">
                             <span>{t("tax_rebat")}</span>
-                            <span>৳ {formatMoney(totalTax > 0 ? rebate : 0)}</span>
+                            <span>
+                                ৳ {totalTax > 0 ? rebate : 0}
+                            </span>
                         </div>
 
-                        {/* After Rebate */}
-                        <div className="flex justify-between  font-semibold">
+                        {/* Tax After Rebate */}
+                        <div className="flex justify-between text-lg font-bold text-success">
                             <span>{t("after_rebat")}</span>
-                            <span>৳ {formatMoney(afterRebateTax)}</span>
+                            <span>৳ {afterRebateTax}</span>
                         </div>
 
                         {/* Minimum Tax */}
                         <div className="flex justify-between text-sm opacity-70">
                             <span>{t("min_tax_final")}</span>
-                            <span>
-                                ৳ {formatMoney(totalTax === 0 ? 0 : minTax)}
-                            </span>
+                            <span>৳ {totalTax === 0 ? 0 : minTax}</span>
                         </div>
 
-                        {/* Net Tax */}
+                        {/* Net Tax After Rebate */}
                         <div className="flex justify-between text-lg font-bold text-success">
-                            <span>{t("net_tax")}</span>
-                            <span>৳ {formatMoney(afterRebateTax)}</span>
-                        </div>
-
-                        <div className="flex justify-between">
-                            <span>{t("monthly_tax")}</span>
-                            <span>৳ {formatMoney(afterRebateTax / 12)}</span>
+                            <span>Net Tax</span>
+                            <span>৳ {afterRebateTax}</span>
                         </div>
 
                     </div>
