@@ -158,7 +158,7 @@ const TaxForm = () => {
 
                         {/* Disabled Child Toggle */}
                         <div>
-                            <br />
+                            <span className="hidden md:block"><br /></span>
                             <label className="label">
                                 <span className="label-text">{t("disability_child")} &nbsp;</span>
                             </label>
