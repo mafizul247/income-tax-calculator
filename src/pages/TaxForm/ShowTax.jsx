@@ -4,12 +4,17 @@ const ShowTax = ({ result }) => {
     const { t } = useTranslation();
 
     const {
+        year,
         salary,
         exemption,
         taxable,
-        totalTax,
+        taxAmount,
         rebate,
-        minTax
+        afterRebateTax,
+        minimumTaxApplied,
+        netTax,
+        monthlyTax,
+        disabledChildCount,
     } = result;
 
     // ✅ Number formatter (with .00)
@@ -20,11 +25,7 @@ const ShowTax = ({ result }) => {
         }).format(value || 0);
     };
 
-    // ✅ Clean Tax Logic
-    const afterRebateTax =
-        totalTax === 0
-            ? 0
-            : Math.max(minTax, totalTax - rebate);
+    const yearLabel = year === 2026 ? t("year_2026_27") : t("year_2025_26");
 
     return (
         <div className="max-w-xl mx-auto mt-6">
@@ -36,6 +37,13 @@ const ShowTax = ({ result }) => {
                     <h2 className="card-title text-center text-primary justify-center text-xl">
                         {t("tax_result")}
                     </h2>
+
+                    <div className="text-center text-sm opacity-70 -mt-2">
+                        {t("financial_year")}: <span className="font-semibold">{yearLabel}</span>
+                        {year === 2026 && disabledChildCount > 0 && (
+                            <> &nbsp;•&nbsp; {t("child_count")}: <span className="font-semibold">{disabledChildCount}</span></>
+                        )}
+                    </div>
 
                     <div className="space-y-3 mt-4">
 
@@ -65,16 +73,16 @@ const ShowTax = ({ result }) => {
 
                         <div className="divider"></div>
 
-                        {/* Total Tax */}
+                        {/* Total Tax (before rebate) */}
                         <div className="flex justify-between text-lg font-bold text-primary">
                             <span>{t("total_tax")}</span>
-                            <span>৳ {formatMoney(totalTax)}</span>
+                            <span>৳ {formatMoney(taxAmount)}</span>
                         </div>
 
                         {/* Tax Rebate */}
                         <div className="flex justify-between">
                             <span>{t("tax_rebat")}</span>
-                            <span>৳ {formatMoney(totalTax > 0 ? rebate : 0)}</span>
+                            <span>৳ {formatMoney(rebate)}</span>
                         </div>
 
                         {/* After Rebate */}
@@ -87,19 +95,19 @@ const ShowTax = ({ result }) => {
                         <div className="flex justify-between text-sm opacity-70">
                             <span>{t("min_tax_final")}</span>
                             <span>
-                                ৳ {formatMoney(totalTax === 0 ? 0 : minTax)}
+                                ৳ {formatMoney(minimumTaxApplied)}
                             </span>
                         </div>
 
                         {/* Net Tax */}
                         <div className="flex justify-between text-lg font-bold text-success">
                             <span>{t("net_tax")}</span>
-                            <span>৳ {formatMoney(afterRebateTax)}</span>
+                            <span>৳ {formatMoney(netTax)}</span>
                         </div>
 
                         <div className="flex justify-between">
                             <span>{t("monthly_tax")}</span>
-                            <span>৳ {formatMoney(afterRebateTax / 12)}</span>
+                            <span>৳ {formatMoney(monthlyTax)}</span>
                         </div>
 
                     </div>

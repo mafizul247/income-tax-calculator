@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { taxExampted } from "../../utilitis/taxExamption";
-import { taxCalculation } from "../../utilitis/taxCalculation";
-import { investment } from "../../utilitis/investmentCalculation";
-import { minTaxCalculation } from "../../utilitis/minTaxCalculation";
+import { calculateTax } from "../../utilitis/taxEngine";
 import ShowTax from "./ShowTax";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
@@ -39,6 +36,21 @@ const TaxForm = () => {
         });
     };
 
+    // Disabled-child benefit only exists in the FY 2026-2027 rules
+    const isDisabledChildApplicable = formData.year === "2026";
+
+    const handleYearChange = (e) => {
+        const { value } = e.target;
+        setFormData({ ...formData, year: value });
+
+        // Reset the disabled-child inputs when switching to a year that
+        // doesn't support this benefit, so stale values never leak in.
+        if (value !== "2026") {
+            setCheckValue("no");
+            setCount(1);
+        }
+    };
+
     const handleIncreseCount = () => {
         if (checkValue === "yes") setCount(count + 1);
     };
@@ -50,39 +62,23 @@ const TaxForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const category = parseInt(formData.category);
-        const taxArea = parseInt(formData.city);
-        const totalSalary = parseInt(formData.salary);
-        const financialYear = parseInt(formData.year);
-        const ActualInv = parseInt(formData.investment || 0);
+        const year = parseInt(formData.year); // 2025 (FY 2025-2026) or 2026 (FY 2026-2027)
+        const city = parseInt(formData.city);
+        const salary = parseInt(formData.salary);
+        const investment = parseInt(formData.investment || 0);
+        const disabledChildCount =
+            isDisabledChildApplicable && checkValue === "yes" ? count : 0;
 
-        let taxSlab = category;
-
-        // ✅ Child benefit
-        if (checkValue === "yes") {
-            taxSlab += count * 50000;
-        }
-
-        const taxExamption = taxExampted(totalSalary);
-        const taxableIncome = totalSalary - taxExamption;
-
-        const totalTax = taxCalculation(taxSlab, taxArea, taxableIncome);
-        const minimumTax = minTaxCalculation(taxArea, totalTax);
-        const invRebate = investment(ActualInv, taxableIncome);
-
-        setResult({
-            year: financialYear,
-            salary: totalSalary,
-            exemption: taxExamption,
-            taxable: taxableIncome,
-            taxSlab,
-            totalTax,
-            rebate: invRebate,
-            minimumTax,
-            minTax: taxArea,
-            hasDisableChild: checkValue,
-            childCount: count,
+        const calculated = calculateTax({
+            year,
+            category: formData.category, // 'general' | 'female' | 'disabled' | 'freedom'
+            city,
+            salary,
+            investment,
+            disabledChildCount,
         });
+
+        setResult(calculated);
     };
 
     return (
@@ -104,12 +100,13 @@ const TaxForm = () => {
                             <select
                                 name="year"
                                 value={formData.year}
-                                onChange={handleChange}
+                                onChange={handleYearChange}
                                 className="select select-bordered w-full"
                                 required
                             >
                                 <option value="">{t("financial_year")}</option>
-                                <option value={2526}>{t("year_2026")}</option>
+                                <option value="2025">{t("year_2025_26")}</option>
+                                <option value="2026">{t("year_2026_27")}</option>
                             </select>
                         </div>
 
@@ -126,10 +123,10 @@ const TaxForm = () => {
                                 required
                             >
                                 <option value="">{t("select_category")}</option>
-                                <option value={375000}>{t("general")}</option>
-                                <option value={425000}>{t("female")}</option>
-                                <option value={500000}>{t("disabled")}</option>
-                                <option value={525000}>{t("freedom")}</option>
+                                <option value="general">{t("general")}</option>
+                                <option value="female">{t("female")}</option>
+                                <option value="disabled">{t("disabled")}</option>
+                                <option value="freedom">{t("freedom")}</option>
                             </select>
                         </div>
                     </div>
@@ -156,25 +153,27 @@ const TaxForm = () => {
                             </select>
                         </div>
 
-                        {/* Disabled Child Toggle */}
-                        <div>
-                            <span className="hidden md:block"><br /></span>
-                            <label className="label">
-                                <span className="label-text">{t("disability_child")} &nbsp;</span>
-                            </label>
-                            <input
-                                type="checkbox"
-                                className="toggle toggle-primary"
-                                checked={checkValue === "yes"}
-                                onChange={() =>
-                                    setCheckValue(checkValue === "yes" ? "no" : "yes")
-                                }
-                            />
-                        </div>
+                        {/* Disabled Child Toggle — FY 2026-2027 only */}
+                        {isDisabledChildApplicable && (
+                            <div>
+                                <span className="hidden md:block"><br /></span>
+                                <label className="label">
+                                    <span className="label-text">{t("disability_child")} &nbsp;</span>
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    className="toggle toggle-primary"
+                                    checked={checkValue === "yes"}
+                                    onChange={() =>
+                                        setCheckValue(checkValue === "yes" ? "no" : "yes")
+                                    }
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Child Count */}
-                    {checkValue === "yes" && (
+                    {isDisabledChildApplicable && checkValue === "yes" && (
                         <div className="flex justify-between items-center bg-base-100 p-3 rounded">
 
                             <span>{t("child_count")}</span>

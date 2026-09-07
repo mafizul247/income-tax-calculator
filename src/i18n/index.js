@@ -34,7 +34,8 @@ const resources = {
 
             tax_title: "Tax Calculator",
             tax_category: "Tax Payer Category",
-            year_2026: "2025-2026",
+            year_2025_26: "2025-2026",
+            year_2026_27: "2026-2027",
             disability_child: "Disabled Child",
             yes: "Yes",
             no: "No",
@@ -90,7 +91,8 @@ const resources = {
 
             tax_title: "ট্যাক্স ক্যালকুলেটর",
             tax_category: "কর প্রদানকারী শ্রেণী",
-            year_2026: "২০২৫-২০২৬",
+            year_2025_26: "২০২৫-২০২৬",
+            year_2026_27: "২০২৬-২০২৭",
             disability_child: "প্রতিবন্ধী সন্তান",
             yes: "হ্যাঁ",
             no: "না",
