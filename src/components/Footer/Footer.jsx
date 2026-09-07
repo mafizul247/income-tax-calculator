@@ -93,6 +93,9 @@ const Footer = () => {
                 {/* Bottom */}
                 <div className="border-t mt-8 pt-4 text-center text-sm">
                     © {new Date().getFullYear()} {t("tax")} — {t("rights")} {t("author_name")}
+                    <p> Contact:{" "}
+                        <a href="mailto:mafizul247@gmail.com" className="link link-hover text-base-content/60"> mafizul247@gmail.com </a>
+                    </p>
                 </div>
 
             </div>

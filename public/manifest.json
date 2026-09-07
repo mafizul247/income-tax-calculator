@@ -1,0 +1,23 @@
+{
+  "name": "Tax Calculator BD - আয়কর ক্যালকুলেটর বাংলাদেশ",
+  "short_name": "Tax Calculator BD",
+  "description": "বাংলাদেশের FY 2025-2026 ও FY 2026-2027 অর্থবছরের জন্য বিনামূল্যে আয়কর ক্যালকুলেটর",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "lang": "bn",
+  "icons": [
+    {
+      "src": "/tax-icon-1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
