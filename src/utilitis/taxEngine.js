@@ -36,10 +36,10 @@ const THRESHOLDS = {
     },
     2026: {
         // FY 2026-2027 — "Tax Calucation 2026-2027" sheet, I6:J9
-        general: 375000,
-        female: 425000,
-        disabled: 500000,
-        freedom: 525000,
+        general: 400000,
+        female: 450000,
+        disabled: 525000,
+        freedom: 550000,
     },
 };
 

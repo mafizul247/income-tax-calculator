@@ -79,7 +79,7 @@ const resources = {
 
             faq_title: "Frequently Asked Questions (FAQ)",
             faq_q1: "What is the tax-free income limit for an individual taxpayer in Bangladesh?",
-            faq_a1: "For FY 2026-2027, the tax-free limit is ৳3,75,000 for a general taxpayer, ৳4,25,000 for a woman or a citizen aged 65+, ৳5,00,000 for a person with a disability, and ৳5,25,000 for a gazetted war-wounded freedom fighter. For FY 2025-2026, the limits were ৳3,50,000, ৳4,00,000, ৳4,75,000, and ৳5,00,000 respectively.",
+            faq_a1: "For FY 2026-2027, the tax-free limit is ৳4,00,000 for a general taxpayer, ৳4,50,000 for a woman or a citizen aged 65+, ৳5,25,000 for a person with a disability, and ৳5,50,000 for a gazetted war-wounded freedom fighter. For FY 2025-2026, the limits were ৳3,50,000, ৳4,00,000, ৳4,75,000, and ৳5,00,000 respectively.",
             faq_q2: "How does this calculator compute income tax?",
             faq_a2: "It applies the NBR's step-by-step tax slabs (0%, then 5% or 10%, 15%, 20%, 25%, 30%) to your taxable income after exemption, then deducts your investment rebate and applies the city-based minimum tax to get your final net tax.",
             faq_q3: "How is the investment rebate calculated?",
@@ -166,7 +166,7 @@ const resources = {
 
             faq_title: "সচরাচর জিজ্ঞাসিত প্রশ্ন (FAQ)",
             faq_q1: "বাংলাদেশে ব্যক্তি করদাতার করমুক্ত আয়ের সীমা কত?",
-            faq_a1: "FY ২০২৬-২০২৭ অর্থবছরে সাধারণ করদাতার জন্য করমুক্ত আয়ের সীমা ৳৩,৭৫,০০০, নারী/৬৫+ বয়সী ব্যক্তির জন্য ৳৪,২৫,০০০, প্রতিবন্ধী ব্যক্তির জন্য ৳৫,০০,০০০ এবং গেজেটেড মুক্তিযোদ্ধার জন্য ৳৫,২৫,০০০। FY ২০২৫-২০২৬ অর্থবছরে এই সীমা ছিল যথাক্রমে ৳৩,৫০,০০০, ৳৪,০০,০০০, ৳৪,৭৫,০০০ ও ৳৫,০০,০০০।",
+            faq_a1: "FY ২০২৬-২০২৭ অর্থবছরে সাধারণ করদাতার জন্য করমুক্ত আয়ের সীমা ৳৪,০০,০০০, নারী/৬৫+ বয়সী ব্যক্তির জন্য ৳৪,৫০,০০০, প্রতিবন্ধী ব্যক্তির জন্য ৳৫,২৫,০০০ এবং গেজেটেড মুক্তিযোদ্ধার জন্য ৳৫,৫০,০০০। FY ২০২৫-২০২৬ অর্থবছরে এই সীমা ছিল যথাক্রমে ৳৩,৫০,০০০, ৳৪,০০,০০০, ৳৪,৭৫,০০০ ও ৳৫,০০,০০০।",
             faq_q2: "এই ক্যালকুলেটর কীভাবে আয়কর হিসাব করে?",
             faq_a2: "বার্ষিক মোট বেতন থেকে NBR-এর নির্ধারিত স্ল্যাব অনুযায়ী ধাপে ধাপে (০%, ৫% বা ১০%, ১৫%, ২০%, ২৫%, ৩০%) কর হিসাব করে, তারপর বিনিয়োগ রেয়াত বাদ দিয়ে এবং শহরভিত্তিক ন্যূনতম কর প্রয়োগ করে চূড়ান্ত নেট কর নির্ণয় করা হয়।",
             faq_q3: "বিনিয়োগ রেয়াত কীভাবে হিসাব করা হয়?",

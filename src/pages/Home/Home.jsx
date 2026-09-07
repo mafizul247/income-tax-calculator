@@ -12,10 +12,10 @@ const Home = () => {
     ];
 
     const categories2026 = [
-        { label: t("general"), limit: "৳3,75,000" },
-        { label: t("female"), limit: "৳4,25,000" },
-        { label: t("disabled"), limit: "৳5,00,000" },
-        { label: t("freedom"), limit: "৳5,25,000" },
+        { label: t("general"), limit: "৳4,00,000" },
+        { label: t("female"), limit: "৳4,50,000" },
+        { label: t("disabled"), limit: "৳5,25,000" },
+        { label: t("freedom"), limit: "৳5,50,000" },
     ];
 
     const faqs = [
