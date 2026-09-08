@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tax-calculator-john.netlify.app/sitemap.xml
+Sitemap: https://tax-calculator-bd.netlify.app/sitemap.xml

@@ -6,7 +6,7 @@ A modern, responsive web application to calculate income tax in Bangladesh based
 
 ## 🌐 Live Demo
 
-👉 https://tax-calculator-john.netlify.app/
+👉 https://tax-calculator-bd.netlify.app/
 
 ---
 
