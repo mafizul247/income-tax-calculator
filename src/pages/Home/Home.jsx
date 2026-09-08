@@ -104,7 +104,7 @@ const Home = () => {
             <meta name="description" content={t("seo_subtitle")} />
 
             {/* ---------------- Hero / H1 ---------------- */}
-            <div className="max-w-3xl mx-auto text-center px-4 pt-6">
+            <div className="max-w-3xl mx-auto text-center px-4 pt-24">
                 <h1 className="text-2xl md:text-3xl font-bold">{t("welcome")}</h1>
                 <p className="mt-3 text-base opacity-80">{t("seo_subtitle")}</p>
             </div>

@@ -69,7 +69,7 @@ const Footer = () => {
                                 }
                                 className="btn btn-sm"
                             >
-                                {i18n.language === "en" ? "EN" : "বাং"}
+                                {i18n.language === "en" ? "বাং" : "EN"}
                             </button>
 
                             {/* Theme Toggle */}
