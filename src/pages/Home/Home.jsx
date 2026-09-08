@@ -1,21 +1,91 @@
 import { useTranslation } from "react-i18next";
 import TaxForm from "../TaxForm/TaxForm";
 
+// Number formatter for the reference tables below (independent of user input).
+const fmt = (n) => new Intl.NumberFormat("en-US").format(n);
+
 const Home = () => {
     const { t } = useTranslation();
 
-    const categories2025 = [
-        { label: t("general"), limit: "৳3,50,000" },
-        { label: t("female"), limit: "৳4,00,000" },
-        { label: t("disabled"), limit: "৳4,75,000" },
-        { label: t("freedom"), limit: "৳5,00,000" },
-    ];
-
-    const categories2026 = [
-        { label: t("general"), limit: "৳4,00,000" },
-        { label: t("female"), limit: "৳4,50,000" },
-        { label: t("disabled"), limit: "৳5,25,000" },
-        { label: t("freedom"), limit: "৳5,50,000" },
+    // ------------------------------------------------------------------
+    // Static reference data for the on-page slab tables — mirrors
+    // src/utilitis/taxEngine.js exactly, sourced from the NBR circular
+    // "আয়কর পরিপত্র ২০২৬-২০২৭" (sections ১.১ / ১.২ / ১.৩) for every
+    // period from FY 2026-2027 onward, and the FY 2025-2026 workbook
+    // for the oldest period.
+    // ------------------------------------------------------------------
+    const periods = [
+        {
+            key: "2030",
+            titleKey: "slabs_2030_31_title",
+            generalThreshold: 500000,
+            brackets: [
+                { amount: 300000, rate: 10 },
+                { amount: 400000, rate: 15 },
+                { amount: 500000, rate: 20 },
+                { amount: 2000000, rate: 25 },
+                { amount: 26300000, rate: 30 },
+            ],
+            remainingRate: 35,
+            female: 550000,
+            disabled: 625000,
+            freedom: 650000,
+            merged: true,
+            flatMinTax: true,
+        },
+        {
+            key: "2028",
+            titleKey: "slabs_2028_29_title",
+            generalThreshold: 450000,
+            brackets: [
+                { amount: 300000, rate: 10 },
+                { amount: 400000, rate: 15 },
+                { amount: 500000, rate: 20 },
+                { amount: 2000000, rate: 25 },
+                { amount: 26350000, rate: 30 },
+            ],
+            remainingRate: 35,
+            female: 500000,
+            disabled: 575000,
+            freedom: 600000,
+            merged: true,
+            flatMinTax: true,
+        },
+        {
+            key: "2026",
+            titleKey: "slabs_2026_27_title",
+            generalThreshold: 400000,
+            brackets: [
+                { amount: 300000, rate: 10 },
+                { amount: 400000, rate: 15 },
+                { amount: 500000, rate: 20 },
+                { amount: 2000000, rate: 25 },
+            ],
+            remainingRate: 30,
+            female: 450000,
+            disabled: 525000,
+            freedom: 550000,
+            merged: true,
+            flatMinTax: true,
+        },
+        {
+            key: "2025",
+            titleKey: "slabs_2025_26_title",
+            generalThreshold: 350000,
+            brackets: [
+                { amount: 100000, rate: 5 },
+                { amount: 400000, rate: 10 },
+                { amount: 500000, rate: 15 },
+                { amount: 500000, rate: 20 },
+                { amount: 2000000, rate: 25 },
+            ],
+            remainingRate: 30,
+            female: 400000,
+            disabled: 475000,
+            freedom: 500000,
+            merged: false,
+            flatMinTax: false,
+        },
     ];
 
     const faqs = [
@@ -24,6 +94,7 @@ const Home = () => {
         { q: t("faq_q3"), a: t("faq_a3") },
         { q: t("faq_q4"), a: t("faq_a4") },
         { q: t("faq_q5"), a: t("faq_a5") },
+        { q: t("faq_q6"), a: t("faq_a6") },
     ];
 
     return (
@@ -51,59 +122,75 @@ const Home = () => {
                 </ul>
             </section>
 
-            {/* ---------------- Tax slab reference tables ---------------- */}
+            {/* ---------------- Tax slab reference tables (all 4 periods) ---------------- */}
             <section className="max-w-3xl mx-auto px-4 mt-14">
-                <h2 className="text-xl font-bold mb-4">{t("slabs_title")}</h2>
+                <h2 className="text-xl font-bold mb-6">{t("slabs_title")}</h2>
 
-                <div className="overflow-x-auto mb-8">
-                    <h3 className="font-semibold mb-2">{t("slabs_2025_26_title")}</h3>
-                    <table className="table table-zebra bg-base-100 rounded-lg">
-                        <thead>
-                            <tr>
-                                <th>{t("slab_col_category")}</th>
-                                <th>{t("slab_col_limit")}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {categories2025.map((row) => (
-                                <tr key={row.label}>
-                                    <td>{row.label}</td>
-                                    <td>{row.limit}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <p className="text-sm opacity-70 mt-2">
-                        {t("slab_col_rate")}: {t("slab_rate_desc_2025")}
-                    </p>
-                </div>
+                {periods.map((p) => (
+                    <div key={p.key} className="mb-12">
+                        <h3 className="font-semibold mb-2">{t(p.titleKey)}</h3>
 
-                <div className="overflow-x-auto">
-                    <h3 className="font-semibold mb-2">{t("slabs_2026_27_title")}</h3>
-                    <table className="table table-zebra bg-base-100 rounded-lg">
-                        <thead>
-                            <tr>
-                                <th>{t("slab_col_category")}</th>
-                                <th>{t("slab_col_limit")}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {categories2026.map((row) => (
-                                <tr key={row.label}>
-                                    <td>{row.label}</td>
-                                    <td>{row.limit}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <p className="text-sm opacity-70 mt-2">
-                        {t("slab_col_rate")}: {t("slab_rate_desc_2026")}
-                    </p>
-                </div>
+                        {/* Income slab table */}
+                        <div className="overflow-x-auto mb-4">
+                            <table className="table table-zebra bg-base-100 rounded-lg">
+                                <thead>
+                                    <tr>
+                                        <th>{t("col_total_income")}</th>
+                                        <th>{t("col_tax_rate")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{t("slab_first", { amount: fmt(p.generalThreshold) })}</td>
+                                        <td>0%</td>
+                                    </tr>
+                                    {p.brackets.map((b, idx) => (
+                                        <tr key={idx}>
+                                            <td>{t("slab_next", { amount: fmt(b.amount) })}</td>
+                                            <td>{b.rate}%</td>
+                                        </tr>
+                                    ))}
+                                    <tr>
+                                        <td>{t("slab_remaining")}</td>
+                                        <td>{p.remainingRate}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Category-wise tax-free limit */}
+                        <div className="bg-base-100 rounded-lg p-4 text-sm md:text-base">
+                            <p className="font-medium mb-2">{t("category_exemptions_title")}</p>
+                            <ul className="list-decimal list-inside space-y-1 opacity-90">
+                                {p.merged ? (
+                                    <>
+                                        <li>{t("category_point_female", { amount: fmt(p.female) })}</li>
+                                        <li>{t("category_point_disabled", { amount: fmt(p.disabled) })}</li>
+                                        <li>{t("category_point_freedom", { amount: fmt(p.freedom) })}</li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li>{t("category_female_plain", { amount: fmt(p.female) })}</li>
+                                        <li>{t("category_disabled_plain", { amount: fmt(p.disabled) })}</li>
+                                        <li>{t("category_freedom_plain", { amount: fmt(p.freedom) })}</li>
+                                    </>
+                                )}
+                            </ul>
+
+                            {p.merged && (
+                                <p className="mt-3 opacity-70">{t("disabled_dependent_note")}</p>
+                            )}
+
+                            <p className="mt-3 opacity-70">
+                                {p.flatMinTax ? t("min_tax_note_flat") : t("min_tax_note_legacy")}
+                            </p>
+                        </div>
+                    </div>
+                ))}
             </section>
 
             {/* ---------------- FAQ (kept in sync with the FAQPage JSON-LD in index.html) ---------------- */}
-            <section className="max-w-3xl mx-auto px-4 mt-14 mb-16">
+            <section className="max-w-3xl mx-auto px-4 mt-4 mb-16">
                 <h2 className="text-xl font-bold mb-4">{t("faq_title")}</h2>
                 <div className="space-y-2">
                     {faqs.map((item) => (

@@ -10,6 +10,7 @@ const TaxForm = () => {
     const [result, setResult] = useState(null);
     const [checkValue, setCheckValue] = useState("no");
     const [count, setCount] = useState(1);
+    const [isNewTaxpayer, setIsNewTaxpayer] = useState(false);
 
     const [formData, setFormData] = useState({
         year: "",
@@ -36,18 +37,24 @@ const TaxForm = () => {
         });
     };
 
-    // Disabled-child benefit only exists in the FY 2026-2027 rules
-    const isDisabledChildApplicable = formData.year === "2026";
+    // FY 2025-2026 is the only period using the older city-based minimum tax.
+    // Every period from FY 2026-2027 onward uses a flat minimum tax and
+    // supports the disabled-dependent benefit / new-taxpayer discount.
+    const isLegacyYear = formData.year === "2025";
+    const isNewRulesYear = formData.year !== "" && !isLegacyYear;
 
     const handleYearChange = (e) => {
         const { value } = e.target;
-        setFormData({ ...formData, year: value });
 
-        // Reset the disabled-child inputs when switching to a year that
-        // doesn't support this benefit, so stale values never leak in.
-        if (value !== "2026") {
+        // Reset year-specific inputs so stale values never leak across years.
+        if (value === "2025") {
             setCheckValue("no");
             setCount(1);
+            setIsNewTaxpayer(false);
+            setFormData((prev) => ({ ...prev, year: value }));
+        } else {
+            // City isn't used for FY 2026-2027 onward — clear it out.
+            setFormData((prev) => ({ ...prev, year: value, city: "" }));
         }
     };
 
@@ -62,12 +69,12 @@ const TaxForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const year = parseInt(formData.year); // 2025 (FY 2025-2026) or 2026 (FY 2026-2027)
-        const city = parseInt(formData.city);
+        const year = parseInt(formData.year); // 2025 | 2026 | 2028 | 2030
+        const city = formData.city ? parseInt(formData.city) : undefined;
         const salary = parseInt(formData.salary);
         const investment = parseInt(formData.investment || 0);
         const disabledChildCount =
-            isDisabledChildApplicable && checkValue === "yes" ? count : 0;
+            isNewRulesYear && checkValue === "yes" ? count : 0;
 
         const calculated = calculateTax({
             year,
@@ -76,6 +83,7 @@ const TaxForm = () => {
             salary,
             investment,
             disabledChildCount,
+            isNewTaxpayer: isNewRulesYear ? isNewTaxpayer : false,
         });
 
         setResult(calculated);
@@ -92,7 +100,7 @@ const TaxForm = () => {
                     {/* Row 1 */}
                     <div className="grid md:grid-cols-2 gap-4">
 
-                        {/* Year */}
+                        {/* Year — newest first */}
                         <div>
                             <label className="label">
                                 <span className="label-text">{t("financial_year")}</span>
@@ -105,8 +113,10 @@ const TaxForm = () => {
                                 required
                             >
                                 <option value="">{t("financial_year")}</option>
+                                <option value="2030">{t("year_2030_31")}</option>
+                                <option value="2028">{t("year_2028_29_29_30")}</option>
+                                <option value="2026">{t("year_2026_27_27_28")}</option>
                                 <option value="2025">{t("year_2025_26")}</option>
-                                <option value="2026">{t("year_2026_27")}</option>
                             </select>
                         </div>
 
@@ -134,27 +144,29 @@ const TaxForm = () => {
                     {/* Row 2 */}
                     <div className="grid md:grid-cols-2 gap-4">
 
-                        {/* City */}
-                        <div>
-                            <label className="label">
-                                <span className="label-text">{t("city")}</span>
-                            </label>
-                            <select
-                                name="city"
-                                value={formData.city}
-                                onChange={handleChange}
-                                className="select select-bordered w-full"
-                                required
-                            >
-                                <option value="">{t("select_city")}</option>
-                                <option value={5000}>{t("dhaka")}</option>
-                                <option value={4000}>{t("other")}</option>
-                                <option value={3000}>{t("rural")}</option>
-                            </select>
-                        </div>
+                        {/* City — only relevant for FY 2025-2026 (older city-based minimum tax) */}
+                        {isLegacyYear && (
+                            <div>
+                                <label className="label">
+                                    <span className="label-text">{t("city")}</span>
+                                </label>
+                                <select
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                    className="select select-bordered w-full"
+                                    required
+                                >
+                                    <option value="">{t("select_city")}</option>
+                                    <option value={5000}>{t("dhaka")}</option>
+                                    <option value={4000}>{t("other")}</option>
+                                    <option value={3000}>{t("rural")}</option>
+                                </select>
+                            </div>
+                        )}
 
-                        {/* Disabled Child Toggle — FY 2026-2027 only */}
-                        {isDisabledChildApplicable && (
+                        {/* Disabled Dependent Toggle — FY 2026-2027 onward */}
+                        {isNewRulesYear && (
                             <div>
                                 <span className="hidden md:block"><br /></span>
                                 <label className="label">
@@ -172,8 +184,8 @@ const TaxForm = () => {
                         )}
                     </div>
 
-                    {/* Child Count */}
-                    {isDisabledChildApplicable && checkValue === "yes" && (
+                    {/* Dependent Count */}
+                    {isNewRulesYear && checkValue === "yes" && (
                         <div className="flex justify-between items-center bg-base-100 p-3 rounded">
 
                             <span>{t("child_count")}</span>
@@ -198,6 +210,19 @@ const TaxForm = () => {
                                     <FaPlus />
                                 </button>
                             </div>
+                        </div>
+                    )}
+
+                    {/* New Taxpayer Toggle — FY 2026-2027 onward (drops minimum tax to ৳1,000) */}
+                    {isNewRulesYear && (
+                        <div className="flex justify-between items-center bg-base-100 p-3 rounded">
+                            <span>{t("new_taxpayer_label")}</span>
+                            <input
+                                type="checkbox"
+                                className="toggle toggle-primary"
+                                checked={isNewTaxpayer}
+                                onChange={() => setIsNewTaxpayer(!isNewTaxpayer)}
+                            />
                         </div>
                     )}
 

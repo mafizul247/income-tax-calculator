@@ -20,7 +20,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 py-10">
 
                 {/* GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
 
                     {/* Logo / About */}
                     <div>
@@ -31,34 +31,26 @@ const Footer = () => {
                         </p>
                     </div>
 
-                    {/* Links (NOW USING NavLink) */}
-                    {/* <div>
+                    {/* Resources */}
+                    <div>
                         <h3 className="font-semibold mb-2">
-                            {t("quick_links")}
+                            {t("resources")}
                         </h3>
 
-                        <ul className="space-y-1">
-
+                        <ul className="space-y-1 text-sm">
                             <li>
-                                <NavLink to="/" className={navClass}>
-                                    {t("home")}
-                                </NavLink>
+                                <a
+                                    href="/documents/aykor-poripotro-2026-2027.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download
+                                    className="link link-hover"
+                                >
+                                    📄 {t("nbr_circular_link")}
+                                </a>
                             </li>
-
-                            <li>
-                                <NavLink to="/about" className={navClass}>
-                                    {t("about")}
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink to="/contact" className={navClass}>
-                                    {t("contact")}
-                                </NavLink>
-                            </li>
-
                         </ul>
-                    </div> */}
+                    </div>
 
                     {/* Settings */}
                     <div>
@@ -94,7 +86,7 @@ const Footer = () => {
                 <div className="border-t mt-8 pt-4 text-center text-sm">
                     © {new Date().getFullYear()} {t("tax")} — {t("rights")} {t("author_name")}
                     <p> Contact:{" "}
-                        <a href="mailto:mafizul247@gmail.com" className="link link-hover text-base-content/60"> mafizul247@gmail.com </a>
+                        <a href="mailto:mafizul247@gmail.com" className="link link-hover text-base-content/60"> mafizul247@gmail.com</a>
                     </p>
                 </div>
 

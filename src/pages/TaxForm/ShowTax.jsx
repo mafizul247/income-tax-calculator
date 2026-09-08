@@ -15,6 +15,7 @@ const ShowTax = ({ result }) => {
         netTax,
         monthlyTax,
         disabledChildCount,
+        isNewTaxpayer,
     } = result;
 
     // ✅ Number formatter (with .00)
@@ -25,7 +26,13 @@ const ShowTax = ({ result }) => {
         }).format(value || 0);
     };
 
-    const yearLabel = year === 2026 ? t("year_2026_27") : t("year_2025_26");
+    const YEAR_LABEL_KEYS = {
+        2030: "year_2030_31",
+        2028: "year_2028_29_29_30",
+        2026: "year_2026_27_27_28",
+        2025: "year_2025_26",
+    };
+    const yearLabel = t(YEAR_LABEL_KEYS[year] || "year_2025_26");
 
     return (
         <div className="max-w-xl mx-auto mt-6">
@@ -40,8 +47,11 @@ const ShowTax = ({ result }) => {
 
                     <div className="text-center text-sm opacity-70 -mt-2">
                         {t("financial_year")}: <span className="font-semibold">{yearLabel}</span>
-                        {year === 2026 && disabledChildCount > 0 && (
+                        {year >= 2026 && disabledChildCount > 0 && (
                             <> &nbsp;•&nbsp; {t("child_count")}: <span className="font-semibold">{disabledChildCount}</span></>
+                        )}
+                        {year >= 2026 && isNewTaxpayer && (
+                            <> &nbsp;•&nbsp; <span className="font-semibold">{t("new_taxpayer_label")}</span></>
                         )}
                     </div>
 
