@@ -161,23 +161,29 @@ const calcSlabTax = (taxableIncome, threshold, slabs) => {
 
 // ----------------------------------------------------------------------------
 // 5) Investment rebate
-//    NetRebate = MIN(15% of eligible investment, 3% of taxable income)
-//    A ৳1,00,00,000 (1 crore) ceiling on eligible investment is applied from
-//    FY 2026-2027 onward (as documented in the FY 2026-2027 workbook); FY
-//    2025-2026 has no such ceiling.
+//    NetRebate = MIN(3% of total income, X% of eligible investment, ceiling)
+//
+//    Section ৩২ of the circular (page 61-62) amends section ৭৮ of the Income
+//    Tax Act, 2023, EFFECTIVE FROM FY 2026-2027:
+//      - eligible-investment rate cut from 15% -> 10%
+//      - rebate ceiling cut from ৳10,00,000 -> ৳7,50,000
+//      - the 3%-of-total-income limit is unchanged
+//    FY 2025-2026 therefore still uses the OLDER rule: 15% / ৳10,00,000 ceiling.
 // ----------------------------------------------------------------------------
-const MAX_ELIGIBLE_INVESTMENT = 10000000; // 1 crore
+const INVESTMENT_RULES = {
+    legacy: { rate: 0.15, ceiling: 1000000 },  // FY 2025-2026 and earlier
+    current: { rate: 0.10, ceiling: 750000 },  // FY 2026-2027 onward
+};
 
 const calcInvestmentRebate = (actualInvestment, taxableIncome, year) => {
     if (!actualInvestment || isNaN(actualInvestment) || actualInvestment <= 0) return 0;
 
-    const eligibleInvestment =
-        year >= 2026 ? Math.min(actualInvestment, MAX_ELIGIBLE_INVESTMENT) : actualInvestment;
+    const { rate, ceiling } = year >= 2026 ? INVESTMENT_RULES.current : INVESTMENT_RULES.legacy;
 
-    const byInvestment = eligibleInvestment * 0.15;
+    const byInvestment = actualInvestment * rate;
     const byIncome = taxableIncome * 0.03;
 
-    return Math.min(byInvestment, byIncome);
+    return Math.min(byInvestment, byIncome, ceiling);
 };
 
 // ----------------------------------------------------------------------------

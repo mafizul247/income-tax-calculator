@@ -95,6 +95,7 @@ const Home = () => {
         { q: t("faq_q4"), a: t("faq_a4") },
         { q: t("faq_q5"), a: t("faq_a5") },
         { q: t("faq_q6"), a: t("faq_a6") },
+        { q: t("faq_q7"), a: t("faq_a7") },
     ];
 
     return (
@@ -184,13 +185,42 @@ const Home = () => {
                             <p className="mt-3 opacity-70">
                                 {p.flatMinTax ? t("min_tax_note_flat") : t("min_tax_note_legacy")}
                             </p>
+
+                            <p className="mt-1 opacity-70">
+                                {p.flatMinTax ? t("invest_rebate_note_current") : t("invest_rebate_note_legacy")}
+                            </p>
                         </div>
                     </div>
                 ))}
             </section>
 
+            {/* ---------------- Wealth surcharge disclaimer ---------------- */}
+            <section className="max-w-3xl mx-auto px-4 mt-4">
+                <h2 className="text-xl font-bold mb-3">{t("surcharge_title")}</h2>
+                <div className="bg-base-100 rounded-lg p-4">
+                    <p className="text-sm md:text-base opacity-90 mb-4">{t("surcharge_note")}</p>
+                    <div className="overflow-x-auto">
+                        <table className="table table-zebra">
+                            <thead>
+                                <tr>
+                                    <th>{t("surcharge_col_wealth")}</th>
+                                    <th>{t("surcharge_col_rate")}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>{t("surcharge_row_1")}</td><td>0%</td></tr>
+                                <tr><td>{t("surcharge_row_2")}</td><td>10%</td></tr>
+                                <tr><td>{t("surcharge_row_3")}</td><td>20%</td></tr>
+                                <tr><td>{t("surcharge_row_4")}</td><td>30%</td></tr>
+                                <tr><td>{t("surcharge_row_5")}</td><td>35%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             {/* ---------------- FAQ (kept in sync with the FAQPage JSON-LD in index.html) ---------------- */}
-            <section className="max-w-3xl mx-auto px-4 mt-4 mb-16">
+            <section className="max-w-3xl mx-auto px-4 mt-14 mb-16">
                 <h2 className="text-xl font-bold mb-4">{t("faq_title")}</h2>
                 <div className="space-y-2">
                     {faqs.map((item) => (
